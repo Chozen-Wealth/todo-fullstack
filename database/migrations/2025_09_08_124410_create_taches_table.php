@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('taches', function (Blueprint $table) {
             $table->id();
             $table->string("nom");
-            $table->string("statut");
+            $table->boolean("statut")->default(false);
             $table->timestamps();
         });
     }

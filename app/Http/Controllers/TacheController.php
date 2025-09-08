@@ -28,7 +28,11 @@ class TacheController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tache = new Tache();
+        $tache->nom = $request->nom;
+        
+        $tache->save();
+        return;
     }
 
     /**
@@ -50,16 +54,23 @@ class TacheController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tache $tache)
+    public function update($id, Request $request, Tache $tache)
     {
-        //
+        $validate = $request->validate([
+            "statut" => "required |boolean",
+        ]);
+
+        $tache = Tache::findOrFail($id);
+        $tache->update($validate);
+        return;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tache $tache)
+    public function destroy($id, Tache $tache)
     {
-        //
+        Tache::findOrFail($id)->delete();
+        return;
     }
 }
