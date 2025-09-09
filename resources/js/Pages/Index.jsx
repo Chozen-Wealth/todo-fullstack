@@ -1,5 +1,6 @@
 import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
+import Liste from "./Liste";
 
 export default function Home ({taches, lasttask}) {
 
@@ -22,6 +23,9 @@ export default function Home ({taches, lasttask}) {
     }, [darkMode])
 
     const HandleSubmit = (e) => {
+        // if (tasks.length != 0) {
+        //     e.preventDefault();
+        // }
         e.preventDefault();
         const tempId = lasttask?.id + 1
         const task = {id: tempId, nom: data.nom, statut: false}
@@ -31,36 +35,11 @@ export default function Home ({taches, lasttask}) {
         post("/store");
     }
 
-    const HandleCheck = ( tache) => {
-        // e.preventDefault();
-        setTasks((task) => (tasks.map(t => t.id == tache.id ? {...t, statut: !t.statut} : t)))
-        router.put(`/update/${tache.id}`, 
-            { statut: tache.statut ? 0 : 1 }, 
-            { preserveState: true }
-        );
-    };
-
-    const HandleDelete = (e, id) => {
-        e.preventDefault();
-        setTasks((tasks) => tasks.filter(t => (t.id != id))) 
-        destroy(`/destroy/${id}`)
-    }
-
     const HandleDeleteAll = (e) => {
         e.preventDefault();
         setTasks((tasks) => tasks.filter(t => (t.statut == false)))
         router.delete(`/destroy/all`)
     }
-
-    const tachesfiltrees = tasks.filter(tache => {
-        if (filter == "done") {
-            return tache.statut == true;
-        }
-        if (filter == "undone") {
-            return tache.statut == false;
-        }
-        return true;
-    })
 
 
     return(
@@ -99,28 +78,11 @@ export default function Home ({taches, lasttask}) {
                     </div>
                 </div>
                 <div className={` ${darkMode ? "bg-gray-800":"bg-gray-200"} max-h-60 min-h-60 overflow-auto p-2 flex flex-col gap-2 rounded-lg`}>
-                    {tachesfiltrees.length == 0 ? (
-                        <div className={`flex  ${darkMode ? "bg-gray-700" : "bg-white" } rounded-lg shadow px-3 py-1 justify-between gap-2 items-center`}>
-                            Aucune tâche pour le moment...
-                        </div>
-                    )
-                    :
-                    tachesfiltrees.map(tache => (
-                        <div key={tache?.id} className={`flex  ${darkMode ? tache.statut == true ? "bg-gray-800 border border-gray-600" : "bg-gray-700" : tache.statut == true ? "bg-gray-300 border border-gray-400" : "bg-white" } rounded-lg shadow px-3 py-1 justify-between gap-2 items-center`}>
-                            <input onChange={() => HandleCheck(tache)} type="checkbox" name="statut" id={`tache_${tache.id}`} checked={tache.statut} />
-                            <label htmlFor={`tache_${tache.id}`} className={`grow ${tache.statut ? "line-through" : ""} cursor-pointer`}>{tache.nom}</label>
-                            <form action="" onSubmit={(e) => HandleDelete(e, tache.id)}>
-                                <button className={`${darkMode ? "bg-red-700 hover:bg-red-900" : "bg-red-500 hover:bg-red-700"} lg:flex hidden  px-3 py-1 rounded-lg  text-white cursor-pointer`} type="submit">Delete</button>
-                                <button className={`${darkMode ? "bg-red-700 hover:bg-red-900" : "bg-red-500 hover:bg-red-700"} lg:hidden px-3 py-1 rounded-lg  text-white cursor-pointer`} type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                  <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-                                </svg>
-                                </button>
-                            </form>
-                        </div>
-                    ))}
+                    <Liste taches={taches} filter={filter} darkMode={darkMode} tasks={tasks} setTasks={setTasks} />
                 </div>
                 <form onSubmit={(e) => HandleSubmit(e)} className="flex mt-2">
-                    <input value={input} onChange={(e) => {setInput(e.target.value);setData("nom", e.target.value)}} placeholder="Ajouter une tâche" className={`ps-2 ${darkMode ? "bg-gray-600" : "bg-gray-200"} rounded-s-lg grow`} type="text" name="nom" />
+                    <p className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-s-lg`}>{tasks.filter(task => task.statut == false).length}/{tasks.length} complétés</p>
+                    <input value={input} onChange={(e) => {setInput(e.target.value);setData("nom", e.target.value)}} placeholder="Ajouter une tâche" className={`ps-2 ${darkMode ? "bg-gray-600" : "bg-gray-200"} grow`} type="text" name="nom" />
                     <button className={`${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-700 hover:bg-gray-900"} rounded-e-lg px-3 cursor-pointer py-1 text-white`} type="submit">Ajouter</button>
                 </form>
             </div>
