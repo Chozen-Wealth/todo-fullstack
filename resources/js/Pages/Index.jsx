@@ -44,10 +44,16 @@ export default function Home ({taches, lasttask}) {
 
     return(
         <section className={`flex justify-center h-screen items-center ${darkMode ? "bg-gray-800": "bg-gray-100"} `}>
+            {darkMode ? (
+                <img className="absolute w-full h-70 object-cover top-0 hue-rotate-180" src="https://cdn.vectorstock.com/i/1000v/13/40/todo-list-seamless-pattern-universal-background-vector-7561340.jpg" alt="" />
+            ):
+            (
+                <img className="absolute w-full h-70 object-cover top-0" src="https://cdn.vectorstock.com/i/1000v/13/40/todo-list-seamless-pattern-universal-background-vector-7561340.jpg" alt="" />
+            )}
             <div className="absolute top-5 right-5">
                 <button onClick={()=> setDarkMode(!darkMode)} className={`${darkMode ? "bg-gray-700 text-white hover:bg-gray-600": "bg-white hover:bg-gray-100"} cursor-pointer shadow rounded-lg px-3 py-1`}>{darkMode ? "LightMode" : "DarkMode"}</button>
             </div>
-            <div className={`${darkMode ? "bg-gray-700 text-white": "bg-white"} p-5 flex flex-col items-cente lg:w-1/2 w-11/12 rounded-lg shadow-md`}>
+            <div className={`${darkMode ? "bg-gray-700 text-white": "bg-white"} p-5 flex flex-col items-cente lg:w-1/2 w-11/12 rounded-lg shadow-md absolute z-10`}>
                 <h1 className="text-center text-2xl font-bold">Taches</h1>
                 <div className="flex justify-between items-center">
                     <div className="gap-2 py-3 justify-center lg:flex hidden">
