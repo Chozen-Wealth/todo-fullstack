@@ -1,12 +1,23 @@
 import { router, useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home ({taches}) {
 
-    const {data, setData, post, delete: destroy, reset, errors} = useForm({nom: "",})
+    const {data, setData, post, delete: destroy, reset, errors} = useForm({
+        nom: "",
+    })
 
     const [filter, setFilter] = useState("all")
-    const [darkMode, setDarkMode] = useState(false)
+    // const [darkMode, setDarkMode] = useState(false)
+
+    const [darkMode, setDarkMode] = useState(() => {
+        const stored = localStorage.getItem("darkMode"); 
+        return stored ? JSON.parse(stored) : false;
+    })
+    
+    useEffect(()=>{
+        localStorage.setItem("darkMode", JSON.stringify(darkMode))
+    }, [darkMode])
 
     const HandleSubmit = (e) => {
         e.preventDefault();
@@ -59,17 +70,17 @@ export default function Home ({taches}) {
                     </div>
                     <div className="flex gap-2 py-3 justify-center lg:hidden">
                         <button className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("all")}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-  <path fillRule="evenodd" d="M3 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 5.25Zm0 4.5A.75.75 0 0 1 3.75 9h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clipRule="evenodd" />
-</svg>
-</button>
-                        <button className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("done")}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-  <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
-</svg>
-</button>
-                        <button className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("undone")}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-  <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clipRule="evenodd" />
-</svg>
-</button>
+                          <path fillRule="evenodd" d="M3 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 5.25Zm0 4.5A.75.75 0 0 1 3.75 9h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clipRule="evenodd" />
+                        </svg>
+                        </button>
+                                                <button className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("done")}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                          <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
+                        </svg>
+                        </button>
+                                                <button className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("undone")}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                          <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clipRule="evenodd" />
+                        </svg>
+                        </button>
                     </div>
                     <div>
                         <button onClick={(e) => HandleDeleteAll(e)} className={`px-3 py-1 ${darkMode ? "bg-red-700 hover:bg-red-900" : "hover:bg-red-700 bg-red-500 text-white"} flex gap-1 lg:hidden rounded-lg  cursor-pointer`}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -87,9 +98,9 @@ export default function Home ({taches}) {
                             <form action="" onSubmit={(e) => HandleDelete(e, tache.id)}>
                                 <button className={`${darkMode ? "bg-red-700 hover:bg-red-900" : "bg-red-500 hover:bg-red-700"} lg:flex hidden  px-3 py-1 rounded-lg  text-white cursor-pointer`} type="submit">Delete</button>
                                 <button className={`${darkMode ? "bg-red-700 hover:bg-red-900" : "bg-red-500 hover:bg-red-700"} lg:hidden px-3 py-1 rounded-lg  text-white cursor-pointer`} type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-  <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-</svg>
-</button>
+                                  <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+                                </svg>
+                                </button>
                             </form>
                         </div>
                     ))}
