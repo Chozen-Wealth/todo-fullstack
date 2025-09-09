@@ -11,5 +11,6 @@ Route::get('/', function () {
 });
 
 Route::post("/store", [TacheController::class, "store"]);
+Route::delete("/destroy/all", [TacheController::class, "destroyAll"]);
 Route::delete("/destroy/{id}", [TacheController::class, "destroy"]);
 Route::put("/update/{id}", [TacheController::class, "update"]);

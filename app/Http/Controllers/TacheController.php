@@ -54,10 +54,11 @@ class TacheController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request, Tache $tache)
+    public function update($id, Request $request)
     {
+        
         $validate = $request->validate([
-            "statut" => "required |boolean",
+            "statut" => "required|boolean",
         ]);
 
         $tache = Tache::findOrFail($id);
@@ -71,6 +72,10 @@ class TacheController extends Controller
     public function destroy($id, Tache $tache)
     {
         Tache::findOrFail($id)->delete();
+        return;
+    }
+    public function destroyAll () {
+        Tache::where("statut", true)->delete();
         return;
     }
 }
