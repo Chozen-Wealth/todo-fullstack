@@ -1,12 +1,12 @@
 import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
-export default function Home ({taches}) {
+export default function Home ({taches, lasttask}) {
 
     const {data, setData, post, delete: destroy, reset, errors} = useForm({
         nom: "",
     })
-
+    // console.log(lasttask.id)
     const [tasks, setTasks] = useState(taches)
     const [filter, setFilter] = useState("all")
     const [input, setInput] = useState("")
@@ -23,9 +23,10 @@ export default function Home ({taches}) {
 
     const HandleSubmit = (e) => {
         e.preventDefault();
-        const task = {nom: data.nom, statut: false}
+        const tempId = lasttask?.id + 1
+        const task = {id: tempId, nom: data.nom, statut: false}
         setTasks((tasks) => ([...tasks, task]))
-        // reset("nom")
+        reset("nom")
         setInput("")
         post("/store");
     }
@@ -61,7 +62,6 @@ export default function Home ({taches}) {
         return true;
     })
 
-    console.log(tachesfiltrees)
 
     return(
         <section className={`flex justify-center h-screen items-center ${darkMode ? "bg-gray-800": "bg-gray-100"} `}>
@@ -72,9 +72,9 @@ export default function Home ({taches}) {
                 <h1 className="text-center text-2xl font-bold">Taches</h1>
                 <div className="flex justify-between items-center">
                     <div className="gap-2 py-3 justify-center lg:flex hidden">
-                        <button className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("all")}>Tous</button>
-                        <button className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("done")}>Terminés</button>
-                        <button className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("undone")}>Non terminés</button>
+                        <button className={`px-3 py-1 ${darkMode ? filter == "all" ? "bg-gray-900": "bg-gray-800 hover:bg-gray-900" : filter == "all" ? "bg-gray-400" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("all")}>Tous</button>
+                        <button className={`px-3 py-1 ${darkMode ? filter == "done" ? "bg-gray-900": "bg-gray-800 hover:bg-gray-900" : filter == "done" ? "bg-gray-400" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("done")}>Terminés</button>
+                        <button className={`px-3 py-1 ${darkMode ? filter == "undone" ? "bg-gray-900": "bg-gray-800 hover:bg-gray-900" : filter == "undone" ? "bg-gray-400" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("undone")}>Non terminés</button>
                     </div>
                     <div className="flex gap-2 py-3 justify-center lg:hidden">
                         <button className={`px-3 py-1 ${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-300 hover:bg-gray-400"}  rounded-lg  cursor-pointer`} onClick={()=> setFilter("all")}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">

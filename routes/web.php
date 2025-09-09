@@ -7,7 +7,8 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     $taches = Tache::all();
-    return Inertia::render("Index", compact("taches"));
+    $lasttask = Tache::latest()->first();
+    return Inertia::render("Index", compact("taches", "lasttask"));
 });
 
 Route::post("/store", [TacheController::class, "store"]);
