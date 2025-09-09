@@ -7,8 +7,9 @@ export default function Home ({taches}) {
         nom: "",
     })
 
+    const [tasks, setTasks] = useState(taches)
     const [filter, setFilter] = useState("all")
-    // const [darkMode, setDarkMode] = useState(false)
+    // const [newTask, setNewTask]
 
     const [darkMode, setDarkMode] = useState(() => {
         const stored = localStorage.getItem("darkMode"); 
@@ -21,14 +22,15 @@ export default function Home ({taches}) {
 
     const HandleSubmit = (e) => {
         e.preventDefault();
-        post("/store", {
-            onSuccess: () => reset("nom")
-        });
+        const task = {nom: data.nom, statut: false}
+        setTasks((tasks) => ([...tasks, task]))
+        reset("nom")
+        post("/store");
     }
 
-    const HandleCheck = (e, tache) => {
-        e.preventDefault();
-
+    const HandleCheck = ( tache) => {
+        // e.preventDefault();
+        setTasks((task) => (tasks.map(t => t.id == tache.id ? {...t, statut: !t.statut} : t)))
         router.put(`/update/${tache.id}`, 
             { statut: tache.statut ? 0 : 1 }, 
             { preserveState: true }
@@ -37,15 +39,17 @@ export default function Home ({taches}) {
 
     const HandleDelete = (e, id) => {
         e.preventDefault();
+        setTasks((tasks) => tasks.filter(t => (t.id != id))) 
         destroy(`/destroy/${id}`)
     }
 
     const HandleDeleteAll = (e) => {
         e.preventDefault();
+        setTasks((tasks) => tasks.filter(t => (t.statut == false)))
         router.delete(`/destroy/all`)
     }
 
-    const tachesfiltrees = taches.filter(tache => {
+    const tachesfiltrees = tasks.filter(tache => {
         if (filter == "done") {
             return tache.statut == true;
         }
@@ -93,7 +97,7 @@ export default function Home ({taches}) {
                 <div className={` ${darkMode ? "bg-gray-800":"bg-gray-200"} max-h-60 min-h-60 overflow-auto p-2 flex flex-col gap-2 rounded-lg`}>
                     { tachesfiltrees.map(tache => (
                         <div key={tache.id} className={`flex  ${darkMode ? tache.statut == true ? "bg-gray-800 border border-gray-600" : "bg-gray-700" : tache.statut == true ? "bg-gray-300 border border-gray-400" : "bg-white" } rounded-lg shadow px-3 py-1 justify-between gap-2 items-center`}>
-                            <input onChange={(e) => HandleCheck(e, tache)} type="checkbox" name="statut" id={`tache_${tache.id}`} checked={tache.statut} />
+                            <input onChange={() => HandleCheck(tache)} type="checkbox" name="statut" id={`tache_${tache.id}`} checked={tache.statut} />
                             <label for={`tache_${tache.id}`} className={`grow ${tache.statut ? "line-through" : ""} cursor-pointer`}>{tache.nom}</label>
                             <form action="" onSubmit={(e) => HandleDelete(e, tache.id)}>
                                 <button className={`${darkMode ? "bg-red-700 hover:bg-red-900" : "bg-red-500 hover:bg-red-700"} lg:flex hidden  px-3 py-1 rounded-lg  text-white cursor-pointer`} type="submit">Delete</button>
