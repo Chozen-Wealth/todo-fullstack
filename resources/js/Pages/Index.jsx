@@ -9,6 +9,7 @@ export default function Home ({taches}) {
 
     const [tasks, setTasks] = useState(taches)
     const [filter, setFilter] = useState("all")
+    const [input, setInput] = useState("")
     // const [newTask, setNewTask]
 
     const [darkMode, setDarkMode] = useState(() => {
@@ -24,7 +25,8 @@ export default function Home ({taches}) {
         e.preventDefault();
         const task = {nom: data.nom, statut: false}
         setTasks((tasks) => ([...tasks, task]))
-        reset("nom")
+        // reset("nom")
+        setInput("")
         post("/store");
     }
 
@@ -58,6 +60,8 @@ export default function Home ({taches}) {
         }
         return true;
     })
+
+    console.log(tachesfiltrees)
 
     return(
         <section className={`flex justify-center h-screen items-center ${darkMode ? "bg-gray-800": "bg-gray-100"} `}>
@@ -95,10 +99,16 @@ export default function Home ({taches}) {
                     </div>
                 </div>
                 <div className={` ${darkMode ? "bg-gray-800":"bg-gray-200"} max-h-60 min-h-60 overflow-auto p-2 flex flex-col gap-2 rounded-lg`}>
-                    { tachesfiltrees.map(tache => (
-                        <div key={tache.id} className={`flex  ${darkMode ? tache.statut == true ? "bg-gray-800 border border-gray-600" : "bg-gray-700" : tache.statut == true ? "bg-gray-300 border border-gray-400" : "bg-white" } rounded-lg shadow px-3 py-1 justify-between gap-2 items-center`}>
+                    {tachesfiltrees.length == 0 ? (
+                        <div className={`flex  ${darkMode ? "bg-gray-700" : "bg-white" } rounded-lg shadow px-3 py-1 justify-between gap-2 items-center`}>
+                            Aucune tâche pour le moment...
+                        </div>
+                    )
+                    :
+                    tachesfiltrees.map(tache => (
+                        <div key={tache?.id} className={`flex  ${darkMode ? tache.statut == true ? "bg-gray-800 border border-gray-600" : "bg-gray-700" : tache.statut == true ? "bg-gray-300 border border-gray-400" : "bg-white" } rounded-lg shadow px-3 py-1 justify-between gap-2 items-center`}>
                             <input onChange={() => HandleCheck(tache)} type="checkbox" name="statut" id={`tache_${tache.id}`} checked={tache.statut} />
-                            <label for={`tache_${tache.id}`} className={`grow ${tache.statut ? "line-through" : ""} cursor-pointer`}>{tache.nom}</label>
+                            <label htmlFor={`tache_${tache.id}`} className={`grow ${tache.statut ? "line-through" : ""} cursor-pointer`}>{tache.nom}</label>
                             <form action="" onSubmit={(e) => HandleDelete(e, tache.id)}>
                                 <button className={`${darkMode ? "bg-red-700 hover:bg-red-900" : "bg-red-500 hover:bg-red-700"} lg:flex hidden  px-3 py-1 rounded-lg  text-white cursor-pointer`} type="submit">Delete</button>
                                 <button className={`${darkMode ? "bg-red-700 hover:bg-red-900" : "bg-red-500 hover:bg-red-700"} lg:hidden px-3 py-1 rounded-lg  text-white cursor-pointer`} type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -110,7 +120,7 @@ export default function Home ({taches}) {
                     ))}
                 </div>
                 <form onSubmit={(e) => HandleSubmit(e)} className="flex mt-2">
-                    <input value={data.nom} onChange={(e) => setData("nom", e.target.value)} placeholder="Ajouter une tâche" className={`ps-2 ${darkMode ? "bg-gray-600" : "bg-gray-200"} rounded-s-lg grow`} type="text" name="nom" />
+                    <input value={input} onChange={(e) => {setInput(e.target.value);setData("nom", e.target.value)}} placeholder="Ajouter une tâche" className={`ps-2 ${darkMode ? "bg-gray-600" : "bg-gray-200"} rounded-s-lg grow`} type="text" name="nom" />
                     <button className={`${darkMode ? "bg-gray-800 hover:bg-gray-900" : "bg-gray-700 hover:bg-gray-900"} rounded-e-lg px-3 cursor-pointer py-1 text-white`} type="submit">Ajouter</button>
                 </form>
             </div>
