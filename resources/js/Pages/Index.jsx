@@ -2,6 +2,7 @@ import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import Liste from "./Liste";
 import videobg from "../../../public/storage/bg-matrix.mp4"
+import lightvideo from "../../../public/storage/abe.mp4"
 
 export default function Home ({taches, lasttask}) {
 
@@ -51,7 +52,8 @@ export default function Home ({taches, lasttask}) {
                 <video className="h-screen w-screen object-cover hue-rotate-180" autoPlay muted loop src={videobg}></video>
             ):
             (
-                <img className="absolute w-full h-70 object-cover top-0" src="https://cdn.vectorstock.com/i/1000v/13/40/todo-list-seamless-pattern-universal-background-vector-7561340.jpg" alt="" />
+                <video className="h-screen w-screen object-cover" autoPlay muted loop src={lightvideo}></video>
+                // <img className="absolute w-full h-70 object-cover top-0" src="https://cdn.vectorstock.com/i/1000v/13/40/todo-list-seamless-pattern-universal-background-vector-7561340.jpg" alt="" />
             )}
             <div className="absolute top-5 right-5">
                 <button onClick={()=> setDarkMode(!darkMode)} className={`${darkMode ? "bg-gray-700 text-white hover:bg-gray-600": "bg-white hover:bg-gray-100"} cursor-pointer shadow rounded-lg px-3 py-1`}>{darkMode ? "LightMode" : "DarkMode"}</button>
