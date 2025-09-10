@@ -47,18 +47,29 @@ export default function Home ({taches, lasttask}) {
     return(
         <section className={`flex justify-center h-screen items-center ${darkMode ? "bg-gray-800": "bg-gray-100"} `}>
             {darkMode ? (
-                // <img className="absolute w-full h-70 object-cover top-0 hue-rotate-180" src="https://cdn.vectorstock.com/i/1000v/13/40/todo-list-seamless-pattern-universal-background-vector-7561340.jpg" alt="" />
-                // <img className="absolute w-full h-screen object-cover top-0 hue-rotate-180 blur-[10px]" src="https://media.gettyimages.com/id/1284938717/fr/vid%C3%A9o/fond-abstrait-royal-dondulation-de-noir.jpg?s=640x640&k=20&c=myaGtg9VPUU_BJipzlqQN1PjpKtNLv40GFaSJ7aseLo=" alt="" />
+                <>
+                <div className="absolute h-screen w-screen bg-gradient-to-t from-gray-800 to-transparent z-2">
+
+                </div>
+                {/* // <img className="absolute w-full h-70 object-cover top-0 hue-rotate-180" src="https://cdn.vectorstock.com/i/1000v/13/40/todo-list-seamless-pattern-universal-background-vector-7561340.jpg" alt="" /> */}
+                {/* // <img className="absolute w-full h-screen object-cover top-0 hue-rotate-180 blur-[10px]" src="https://media.gettyimages.com/id/1284938717/fr/vid%C3%A9o/fond-abstrait-royal-dondulation-de-noir.jpg?s=640x640&k=20&c=myaGtg9VPUU_BJipzlqQN1PjpKtNLv40GFaSJ7aseLo=" alt="" /> */}
                 <video className="h-screen w-screen object-cover hue-rotate-180" autoPlay muted loop src={videobg}></video>
+                </>
             ):
             (
-                <video className="h-screen w-screen object-cover" autoPlay muted loop src={lightvideo}></video>
-                // <img className="absolute w-full h-70 object-cover top-0" src="https://cdn.vectorstock.com/i/1000v/13/40/todo-list-seamless-pattern-universal-background-vector-7561340.jpg" alt="" />
+                // <video className="h-screen w-screen object-cover" autoPlay muted loop src={lightvideo}></video>
+                <>
+                <div className="absolute h-screen w-screen bg-gradient-to-t from-white to-transparent z-2">
+
+                </div>
+                <video className="h-screen w-screen object-cover hue-rotate-[290deg] brightness-200 invert-25" autoPlay muted loop src={videobg}></video>
+                {/* <img className="absolute w-full h-70 object-cover top-0" src="https://cdn.vectorstock.com/i/1000v/13/40/todo-list-seamless-pattern-universal-background-vector-7561340.jpg" alt="" /> */}
+                </>
             )}
-            <div className="absolute top-5 right-5">
+            <div className="absolute top-5 right-5 z-20">
                 <button onClick={()=> setDarkMode(!darkMode)} className={`${darkMode ? "bg-gray-700 text-white hover:bg-gray-600": "bg-white hover:bg-gray-100"} cursor-pointer shadow rounded-lg px-3 py-1`}>{darkMode ? "LightMode" : "DarkMode"}</button>
             </div>
-            <div className={`${darkMode ? "bg-gray-700 text-white shadow-2xl shadow-black/50": "bg-white shadow-md"} p-5 flex flex-col items-cente lg:w-1/2 w-11/12 rounded-lg  absolute z-10`}>
+            <div className={`${darkMode ? "bg-gray-700 text-white shadow-lg shadow-black/25": "bg-white shadow-lg shadow-black/25"} p-5 flex flex-col items-cente lg:w-1/2 w-11/12 rounded-lg  absolute z-10`}>
                 <h1 className="text-center text-2xl font-bold">Taches</h1>
                 <div className="flex justify-between items-center">
                     <div className="gap-2 py-3 justify-center lg:flex hidden">
